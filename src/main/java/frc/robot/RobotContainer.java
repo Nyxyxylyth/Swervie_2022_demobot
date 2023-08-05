@@ -1,0 +1,327 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
+package frc.robot;
+
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.networktables.NetworkTableInstance;
+
+import frc.robot.commands.DriveCommand;
+import util.AutonomousChooser;
+import util.AutonomousTrajectories;
+import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.commands.AutoAimCommand;
+import frc.robot.commands.AutonMacroRecord;
+import frc.robot.commands.IntakePositionCommand;
+import frc.robot.commands.KickerCommand;
+import frc.robot.commands.ShooterCommand;
+import frc.robot.commands.ShooterWait;
+import frc.robot.commands.ShooterYeetCommandPart2ElectricBoogaloo;
+import frc.robot.commands.ShooterYeetCommandPart3ElectricBoogaloo;
+import common.math.Rotation2;
+import common.robot.input.Axis;
+import common.robot.input.XboxController;
+import common.robot.input.DPadButton.Direction;
+
+import java.io.IOException;
+
+import javax.lang.model.util.ElementScanner6;
+
+/**
+ * This class is where the bulk of the robot should be declared. Since Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * subsystems, commands, and button mappings) should be declared here.
+ */
+public class RobotContainer {
+  // The robot's subsystems and commands are defined here...
+  private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
+  private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
+  private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
+
+  private final XboxController m_controller = new XboxController(0);
+  private final XboxController m_operatorController = new XboxController(1);
+
+  private AutonomousTrajectories autonomousTrajectories;
+  private final AutonomousChooser autonomousChooser;
+
+  private double intakeArmPosition=0;
+
+  private JoystickTriggerPressed driverLeftTrigger;
+  private JoystickTriggerPressed operatorLeftTrigger;
+  private JoystickTriggerPressed operatorRightTrigger;
+  private JoystickAxisUp operatorLeftAxisUp;
+  private JoystickAxisDown operatorLeftAxisDown;
+
+  /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   */
+  public RobotContainer() {
+    
+    // Set up the default command for the drivetrain.
+    // The controls are for field-oriented driving:
+    // Left stick Y axis -> forward and backwards movement
+    // Left stick X axis -> left and right movement
+    // Right stick X axis -> rotation
+    try {
+      autonomousTrajectories = new AutonomousTrajectories(DrivetrainSubsystem.TRAJECTORY_CONSTRAINTS);
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+
+    CommandScheduler.getInstance().registerSubsystem(m_intakeSubsystem);
+    CommandScheduler.getInstance().registerSubsystem(m_shooterSubsystem);
+    CommandScheduler.getInstance().registerSubsystem(m_drivetrainSubsystem);
+    CommandScheduler.getInstance().setDefaultCommand(m_drivetrainSubsystem, new DriveCommand(m_drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), getDriveRotationAxis()));
+
+    autonomousChooser = new AutonomousChooser(autonomousTrajectories);
+
+    m_controller.getLeftXAxis().setInverted(true);
+    m_controller.getRightXAxis().setInverted(true);
+
+    // Configure the button bindings
+    configureButtonBindings();
+    m_intakeSubsystem.IntakeSubsystemInit();
+  }
+
+  public DrivetrainSubsystem getDrivetrainSubsystem()
+  {
+    return m_drivetrainSubsystem;
+  }
+
+  public IntakeSubsystem getIntakeSubsystem()
+  {
+    return m_intakeSubsystem;
+  }
+
+  public ShooterSubsystem getShooterSubsystem()
+  {
+    return m_shooterSubsystem;
+  }
+
+private Axis getDriveForwardAxis() {
+    return m_controller.getLeftYAxis();
+}
+
+private Axis getDriveStrafeAxis() {
+    return m_controller.getLeftXAxis();
+}
+
+private Axis getDriveRotationAxis() {
+    return m_controller.getRightXAxis();
+}
+
+private class JoystickTriggerPressed extends Trigger {
+  private Axis m_axis;
+  public JoystickTriggerPressed( Axis axis )
+  {
+    m_axis = axis;
+  }
+  @Override
+  public boolean getAsBoolean() {
+    if( m_axis.get() >= 0.25 )
+    {
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+  }
+}
+
+private class JoystickAxisUp extends Trigger {
+  private Axis m_axis;
+  public JoystickAxisUp( Axis axis )
+  {
+    m_axis = axis;
+  }
+  @Override
+  public boolean getAsBoolean() {
+    if( m_axis.get() >= 0.5 )
+    {
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+  }
+}
+
+private class JoystickAxisDown extends Trigger {
+  private Axis m_axis;
+  public JoystickAxisDown( Axis axis )
+  {
+    m_axis = axis;
+  }
+  @Override
+  public boolean getAsBoolean() {
+    if( m_axis.get() <= -0.5 )
+    {
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+  }
+}
+
+
+/**
+   * Use this method to define your button->command mappings. Buttons can be created by
+   * instantiating a {@link GenericHID} or one of its subclasses ({@link
+   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
+   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+   */
+  private void configureButtonBindings() {
+
+    // Back button zeros the gyroscope
+    m_controller.getBackButton().whenPressed(
+      () -> m_drivetrainSubsystem.resetGyroAngle(Rotation2.ZERO) );
+
+    // Driver left trigger records a macro
+    driverLeftTrigger = new JoystickTriggerPressed( m_controller.getLeftTriggerAxis() );
+    driverLeftTrigger
+      .whenActive( new AutonMacroRecord( "/home/lvuser/autonpath.csv", m_drivetrainSubsystem) );
+
+    m_controller.getLeftBumperButton()
+      .whileActiveOnce( new AutoAimCommand( m_drivetrainSubsystem ) );
+
+    //Shooter controls on operator controller
+    // center to back bumper  12' 1" = 2500 rpm   limelight ty 0 degrees
+    // center to back bumper: 13' 3" = 2500 rpm   limelight ty 4.00 degrees
+    // center to back bumper: 15' 1" = 2900 rpm
+    m_operatorController.getDPadButton(Direction.UP)
+      .whileActiveOnce( new ShooterYeetCommandPart2ElectricBoogaloo( m_shooterSubsystem, 2200)
+        .andThen( ()->m_shooterSubsystem.setKickerSpeed(0.0) )
+        .andThen( ()->m_shooterSubsystem.setYeetSpeed(0.0) ) 
+      );
+
+    m_operatorController.getDPadButton(Direction.LEFT)
+      .whileActiveOnce( new ShooterYeetCommandPart2ElectricBoogaloo( m_shooterSubsystem, Constants.YEET_SPEED_LOW)
+        .andThen( ()->m_shooterSubsystem.setKickerSpeed(0.0) )
+        .andThen( ()->m_shooterSubsystem.setYeetSpeed(0.0) ) 
+      );
+
+    m_operatorController.getDPadButton(Direction.RIGHT)
+      .whileActiveOnce( new ShooterYeetCommandPart2ElectricBoogaloo( m_shooterSubsystem, Constants.YEET_SPEED_HIGH)
+        .andThen( ()->m_shooterSubsystem.setKickerSpeed(0.0) )
+        .andThen( ()->m_shooterSubsystem.setYeetSpeed(0.0) ) 
+      );
+
+  m_operatorController.getDPadButton(Direction.DOWN)
+    .whileActiveOnce( new ShooterYeetCommandPart2ElectricBoogaloo( m_shooterSubsystem,  2700)
+      .andThen( ()->m_shooterSubsystem.setKickerSpeed(0.0) )
+      .andThen( ()->m_shooterSubsystem.setYeetSpeed(0.0) ) 
+    );
+
+    //Kicker controls on drive controller
+    m_controller.getDPadButton(Direction.UP)
+      .whileActiveOnce( new KickerCommand( m_shooterSubsystem, 1.0, false, false, 0 ) );
+
+    m_controller.getDPadButton(Direction.DOWN)
+      .whileActiveOnce(new KickerCommand(m_shooterSubsystem, -1.0, false, false, 0));
+
+    m_controller.getDPadButton(Direction.LEFT)
+      .whileActiveOnce(new ShooterYeetCommandPart3ElectricBoogaloo( m_shooterSubsystem, -500));
+
+    m_controller.getDPadButton(Direction.RIGHT)
+      .whileActiveOnce(new ShooterYeetCommandPart3ElectricBoogaloo( m_shooterSubsystem, 500));
+
+    m_controller.getAButton()
+      .whileActiveOnce( KickerMultipleCommand( 0.7 ) );
+
+    operatorLeftAxisUp = new JoystickAxisUp( m_operatorController.getLeftYAxis() );
+    operatorLeftAxisUp
+      .whenActive( new IntakePositionCommand( m_intakeSubsystem, Constants.INTAKE_ARM_POSITION_OUT ) );
+
+    operatorLeftAxisDown = new JoystickAxisDown( m_operatorController.getLeftYAxis() );
+    operatorLeftAxisDown
+      .whenActive( IntakeRetractCommand() );
+  }
+
+  //We build generate this using a function since it's both parameterized, 
+  //and reused multiple times in different autos
+  public ParallelCommandGroup IntakeRetractCommand(){
+    return    
+    new ParallelCommandGroup(
+        new IntakePositionCommand( m_intakeSubsystem, Constants.INTAKE_ARM_POSITION_IN_FULL ),
+        // run the kicker forward slowly until the light curtain is blocked
+        new KickerCommand( m_shooterSubsystem, 0.5, true, true, 0 )
+          .withTimeout(5.0)
+    );
+  }
+
+  public SequentialCommandGroup KickerMultipleCommand(double m_output){
+    return    
+    new SequentialCommandGroup(
+      // run the kicker forward slowly until the light curtain is blocked
+      new KickerCommand( m_shooterSubsystem, 1.0, true, true, 0),
+
+      // wait for the shooter wheel to be at the right speed
+      new ShooterWait( m_shooterSubsystem ),
+      new WaitCommand(0.1),
+
+      // run the kicker forwards until the light curtain is not blocked (ball is gone)
+      new KickerCommand( m_shooterSubsystem, m_output, true, false, 200 ).withTimeout(2.0),
+
+      // run the kicker forward slowly until the light curtain is blocked
+      new KickerCommand( m_shooterSubsystem, 1.0, true, true, 0 ),
+
+      // wait for the shooter wheel to be at the right speed
+      new ShooterWait( m_shooterSubsystem ),
+      new WaitCommand(0.1),
+
+      // run the kicker forwards until the light curtain is not blocked (ball is gone)
+      new KickerCommand( m_shooterSubsystem, m_output, true, false, 200 ).withTimeout(2.0)
+    );
+  }
+  
+
+  public void checkBumper()
+  {
+    if(m_controller.getRightBumperButton().getAsBoolean()==true){
+      m_drivetrainSubsystem.joystickDivider = 1.5;
+    }else{
+      m_drivetrainSubsystem.joystickDivider = 1.0;
+    }
+  }
+
+  public void controlIntake(){
+    double yAxis;
+    double setSpeed = 0;
+    yAxis = m_operatorController.getRightYAxis().get();
+    if( yAxis < -0.1 )
+    {
+      setSpeed = -0.4 + (yAxis / 3);
+    }
+    else if( yAxis > 0.1 )
+    {
+      setSpeed = 0.4 + (yAxis / 3);
+    }
+    m_intakeSubsystem.setIntakeSpeed( setSpeed );
+  }
+
+
+  /**
+   * Use this to pass the autonomous command to the main {@link Robot} class.
+   *
+   * @return the command to run in autonomous
+   */
+  public Command getAutonomousCommand() {
+    // An ExampleCommand will run in autonomous
+    return autonomousChooser.getCommand(this);
+  }
+
+}
