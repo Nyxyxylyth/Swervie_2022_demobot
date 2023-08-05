@@ -84,11 +84,6 @@ public class ShooterSubsystem extends SubsystemBase{
     @Override
     public void periodic() {
       // This method will be called once per scheduler run
-      if( isLightCurtainBlocked() == true )
-        lightSensor.setNumber( 1 );
-      else {
-        lightSensor.setNumber(0);
-      }
       shooterOutputEntry.setDouble( m_yeetMotor.getBusVoltage() );
       shooterSpeedEntry.setDouble( getSpeed() );
     }

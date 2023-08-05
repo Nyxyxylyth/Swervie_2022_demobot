@@ -292,9 +292,9 @@ private class JoystickAxisDown extends Trigger {
   public void checkBumper()
   {
     if(m_controller.getRightBumperButton().getAsBoolean()==true){
-      m_drivetrainSubsystem.joystickDivider = 1.5;
+      m_drivetrainSubsystem.joystickDivider = 5;
     }else{
-      m_drivetrainSubsystem.joystickDivider = 1.0;
+      m_drivetrainSubsystem.joystickDivider = 5;
     }
   }
 

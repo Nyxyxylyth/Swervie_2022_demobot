@@ -33,6 +33,7 @@ public class DriveCommand extends CommandBase {
         {
             // !*!*!* FIXME: not sure why we have to divide rotate by 10 here...  maybe it should be radians instead of -1..1
             driveRotation = rotation.get(true) / 10.0;
+            driveRotation = driveRotation / 5.0;  // slow it down for demo driving
         }
         m_drivetrainSubsystem.drive(new Vector2(forward.get(true)/m_drivetrainSubsystem.joystickDivider,
                                               strafe.get(true)/m_drivetrainSubsystem.joystickDivider),
