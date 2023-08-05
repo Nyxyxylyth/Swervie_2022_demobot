@@ -1,8 +1,6 @@
 package common.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.PIDSource;
-import edu.wpi.first.math.controller.PIDSourceType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -45,25 +43,8 @@ public final class HolonomicDriveCommand extends CommandBase {
 		this.rotationAxis = rotationAxis;
 		this.fieldOrientedOverrideButton = fieldOrientedOverrideButton;
 
-		angleController = new PIDController(constants.p, constants.i, constants.d, new PIDSource() {
-			@Override
-			public void setPIDSourceType(PIDSourceType pidSource) {
-			}
-
-			@Override
-			public double pidGet() {
-				return drivetrain.getGyroscope().getAngle().toDegrees();
-			}
-
-			@Override
-			public PIDSourceType getPIDSourceType() {
-				return PIDSourceType.kDisplacement;
-			}
-		}, output -> {
-			angleControllerOutput = output;
-		});
-		angleController.setInputRange(0, 360);
-		angleController.setContinuous(true);
+		angleController = new PIDController(constants.p, constants.i, constants.d );
+		angleController.enableContinuousInput(0, 360);
 
 		addRequirements(drivetrain);
 	}
@@ -73,7 +54,6 @@ public final class HolonomicDriveCommand extends CommandBase {
 		waitingForRotationTimer = false;
 
 		angleController.setSetpoint(drivetrain.getGyroscope().getAngle().toDegrees());
-		angleController.enable();
 	}
 
 	@Override
@@ -81,7 +61,7 @@ public final class HolonomicDriveCommand extends CommandBase {
 		double forward = forwardAxis.get(true);
 		double strafe = strafeAxis.get(true);
 		double rotation = rotationAxis.get(true);
-		boolean fieldOriented = !fieldOrientedOverrideButton.get();
+		boolean fieldOriented = !fieldOrientedOverrideButton.getAsBoolean();
 
 		if (MathUtils.epsilonEquals(rotation, 0)) {
 			if (waitingForRotationTimer) {
@@ -106,12 +86,13 @@ public final class HolonomicDriveCommand extends CommandBase {
 			angleController.setSetpoint(drivetrain.getGyroscope().getAngle().toDegrees());
 		}
 
+		angleController.calculate(drivetrain.getGyroscope().getAngle().toDegrees() );
+
 		drivetrain.holonomicDrive(new Vector2(forward, strafe), rotation, fieldOriented);
 	}
 
 	@Override
 	public void end(boolean interrupted) {
-		angleController.disable();
 		drivetrain.stop();
 	}
 
