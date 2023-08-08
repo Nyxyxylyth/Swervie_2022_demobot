@@ -51,7 +51,8 @@ public class RobotContainer {
   public final XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
 
   private double intakeArmPosition=0;
-  double driveDivider = 1.5;
+  double driveDivider = 2.2; //1.5;
+  double rotateDivider = 2.2; //1.5;
 
   GamepadAxisButton m_driverDpadUp;
   GamepadAxisButton m_driverDpadLeft;
@@ -113,13 +114,8 @@ private double getDriverMoveLeftRight()
 private double getDriverRotate()
 {
     double pos;
-    pos = m_controller.getRawAxis(OIConstants.kDriverRotAxis) / driveDivider;
+    pos = m_controller.getRawAxis(OIConstants.kDriverRotAxis) / rotateDivider;
     return pos;
-}
-
-private void DriveSlowDividerSet( double divider )
-{
-    driveDivider = divider;
 }
 
 
