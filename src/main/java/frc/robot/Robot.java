@@ -34,7 +34,7 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
 
     // Creates UsbCamera and MjpegServer [1] and connects them
-    CameraServer.startAutomaticCapture();
+    //CameraServer.startAutomaticCapture();
   }
 
   /**
@@ -76,8 +76,6 @@ public class Robot extends TimedRobot {
     crop[3] =  0.5; // y1
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("crop").setDoubleArray(crop);
 
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -103,7 +101,6 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    m_robotContainer.checkBumper();
     m_robotContainer.controlIntake();
   }
 

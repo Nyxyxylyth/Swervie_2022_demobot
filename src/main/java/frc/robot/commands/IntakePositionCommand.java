@@ -18,7 +18,9 @@ public class IntakePositionCommand extends CommandBase {
 
         // Called when the command is initially scheduled.
     @Override
-    public void initialize() {
+    public void initialize() 
+    {
+        System.out.println("IntakePositionCommand to " + m_position);
         m_intakeSubsystem.setIntakeArmPosition( m_position );
     }
 }

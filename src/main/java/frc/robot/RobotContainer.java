@@ -13,24 +13,22 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
-import frc.robot.commands.DriveCommand;
-import util.AutonomousChooser;
-import util.AutonomousTrajectories;
-import frc.robot.subsystems.DrivetrainSubsystem;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Axis;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.commands.AutoAimCommand;
-import frc.robot.commands.AutonMacroRecord;
 import frc.robot.commands.IntakePositionCommand;
 import frc.robot.commands.KickerCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.ShooterWait;
 import frc.robot.commands.ShooterYeetCommandPart2ElectricBoogaloo;
 import frc.robot.commands.ShooterYeetCommandPart3ElectricBoogaloo;
-import common.math.Rotation2;
-import common.robot.input.Axis;
-import common.robot.input.XboxController;
-import common.robot.input.DPadButton.Direction;
+import frc.robot.Constants.*;
+import frc.robot.subsystems.SwerveModule;
+import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.commands.SwerveJoystickCmd;
 
 import java.io.IOException;
 
@@ -44,58 +42,46 @@ import javax.lang.model.util.ElementScanner6;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
   private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
 
-  private final XboxController m_controller = new XboxController(0);
-  private final XboxController m_operatorController = new XboxController(1);
+  public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
-  private AutonomousTrajectories autonomousTrajectories;
-  private final AutonomousChooser autonomousChooser;
+  public final XboxController m_controller = new XboxController(OIConstants.kDriverControllerPort);
+  public final XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
 
   private double intakeArmPosition=0;
+  double driveDivider = 1.5;
 
-  private JoystickTriggerPressed driverLeftTrigger;
-  private JoystickTriggerPressed operatorLeftTrigger;
-  private JoystickTriggerPressed operatorRightTrigger;
-  private JoystickAxisUp operatorLeftAxisUp;
-  private JoystickAxisDown operatorLeftAxisDown;
+  GamepadAxisButton m_driverDpadUp;
+  GamepadAxisButton m_driverDpadLeft;
+  GamepadAxisButton m_driverDpadRight;
+  GamepadAxisButton m_driverDpadDown;
+  GamepadAxisButton m_operatorDpadUp;
+  GamepadAxisButton m_operatorDpadLeft;
+  GamepadAxisButton m_operatorDpadRight;
+  GamepadAxisButton m_operatorDpadDown;
+  GamepadAxisButton m_operatorLeftAxisUp;
+  GamepadAxisButton m_operatorLeftAxisDown;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
     
-    // Set up the default command for the drivetrain.
-    // The controls are for field-oriented driving:
-    // Left stick Y axis -> forward and backwards movement
-    // Left stick X axis -> left and right movement
-    // Right stick X axis -> rotation
-    try {
-      autonomousTrajectories = new AutonomousTrajectories(DrivetrainSubsystem.TRAJECTORY_CONSTRAINTS);
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-
     CommandScheduler.getInstance().registerSubsystem(m_intakeSubsystem);
     CommandScheduler.getInstance().registerSubsystem(m_shooterSubsystem);
-    CommandScheduler.getInstance().registerSubsystem(m_drivetrainSubsystem);
-    CommandScheduler.getInstance().setDefaultCommand(m_drivetrainSubsystem, new DriveCommand(m_drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), getDriveRotationAxis()));
-
-    autonomousChooser = new AutonomousChooser(autonomousTrajectories);
-
-    m_controller.getLeftXAxis().setInverted(true);
-    m_controller.getRightXAxis().setInverted(true);
+    
+    swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(
+      swerveSubsystem,
+      () -> getDriverMoveFwdBack(),
+      () -> getDriverMoveLeftRight(),
+      () -> getDriverRotate(),
+      () -> !m_controller.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx)));
 
     // Configure the button bindings
     configureButtonBindings();
     m_intakeSubsystem.IntakeSubsystemInit();
-  }
-
-  public DrivetrainSubsystem getDrivetrainSubsystem()
-  {
-    return m_drivetrainSubsystem;
   }
 
   public IntakeSubsystem getIntakeSubsystem()
@@ -108,73 +94,32 @@ public class RobotContainer {
     return m_shooterSubsystem;
   }
 
-private Axis getDriveForwardAxis() {
-    return m_controller.getLeftYAxis();
+private double getDriverMoveFwdBack()
+{
+    // Handle creeping forward if the driver is pressing D-pad up
+    double pos;
+    // Use the joystick axis
+    pos = m_controller.getRawAxis(OIConstants.kDriverYAxis) / driveDivider;
+    return pos;
 }
 
-private Axis getDriveStrafeAxis() {
-    return m_controller.getLeftXAxis();
+private double getDriverMoveLeftRight()
+{
+    double pos;
+        pos = m_controller.getRawAxis(OIConstants.kDriverXAxis) / driveDivider;
+    return pos;
 }
 
-private Axis getDriveRotationAxis() {
-    return m_controller.getRightXAxis();
+private double getDriverRotate()
+{
+    double pos;
+    pos = m_controller.getRawAxis(OIConstants.kDriverRotAxis) / driveDivider;
+    return pos;
 }
 
-private class JoystickTriggerPressed extends Trigger {
-  private Axis m_axis;
-  public JoystickTriggerPressed( Axis axis )
-  {
-    m_axis = axis;
-  }
-  @Override
-  public boolean getAsBoolean() {
-    if( m_axis.get() >= 0.25 )
-    {
-      return true;
-    }
-    else
-    {
-      return false;
-    }
-  }
-}
-
-private class JoystickAxisUp extends Trigger {
-  private Axis m_axis;
-  public JoystickAxisUp( Axis axis )
-  {
-    m_axis = axis;
-  }
-  @Override
-  public boolean getAsBoolean() {
-    if( m_axis.get() >= 0.5 )
-    {
-      return true;
-    }
-    else
-    {
-      return false;
-    }
-  }
-}
-
-private class JoystickAxisDown extends Trigger {
-  private Axis m_axis;
-  public JoystickAxisDown( Axis axis )
-  {
-    m_axis = axis;
-  }
-  @Override
-  public boolean getAsBoolean() {
-    if( m_axis.get() <= -0.5 )
-    {
-      return true;
-    }
-    else
-    {
-      return false;
-    }
-  }
+private void DriveSlowDividerSet( double divider )
+{
+    driveDivider = divider;
 }
 
 
@@ -186,69 +131,118 @@ private class JoystickAxisDown extends Trigger {
    */
   private void configureButtonBindings() {
 
-    // Back button zeros the gyroscope
-    m_controller.getBackButton().whenPressed(
-      () -> m_drivetrainSubsystem.resetGyroAngle(Rotation2.ZERO) );
-
-    // Driver left trigger records a macro
-    driverLeftTrigger = new JoystickTriggerPressed( m_controller.getLeftTriggerAxis() );
-    driverLeftTrigger
-      .whenActive( new AutonMacroRecord( "/home/lvuser/autonpath.csv", m_drivetrainSubsystem) );
-
-    m_controller.getLeftBumperButton()
-      .whileActiveOnce( new AutoAimCommand( m_drivetrainSubsystem ) );
+    new JoystickButton(m_controller, XboxController.Button.kStart.value)
+      .whenPressed( () -> swerveSubsystem.zeroHeading(0.0) );
 
     //Shooter controls on operator controller
     // center to back bumper  12' 1" = 2500 rpm   limelight ty 0 degrees
     // center to back bumper: 13' 3" = 2500 rpm   limelight ty 4.00 degrees
     // center to back bumper: 15' 1" = 2900 rpm
-    m_operatorController.getDPadButton(Direction.UP)
-      .whileActiveOnce( new ShooterYeetCommandPart2ElectricBoogaloo( m_shooterSubsystem, 2200)
+    m_operatorDpadUp = new GamepadAxisButton(this::operatorDpadUp);
+    m_operatorDpadUp
+      .whileTrue( new ShooterYeetCommandPart2ElectricBoogaloo( m_shooterSubsystem, 2200)
         .andThen( ()->m_shooterSubsystem.setKickerSpeed(0.0) )
         .andThen( ()->m_shooterSubsystem.setYeetSpeed(0.0) ) 
       );
 
-    m_operatorController.getDPadButton(Direction.LEFT)
-      .whileActiveOnce( new ShooterYeetCommandPart2ElectricBoogaloo( m_shooterSubsystem, Constants.YEET_SPEED_LOW)
+    m_operatorDpadLeft = new GamepadAxisButton(this::operatorDpadLeft);
+    m_operatorDpadLeft
+      .whileTrue( new ShooterYeetCommandPart2ElectricBoogaloo( m_shooterSubsystem, Constants.YEET_SPEED_LOW)
         .andThen( ()->m_shooterSubsystem.setKickerSpeed(0.0) )
         .andThen( ()->m_shooterSubsystem.setYeetSpeed(0.0) ) 
       );
 
-    m_operatorController.getDPadButton(Direction.RIGHT)
-      .whileActiveOnce( new ShooterYeetCommandPart2ElectricBoogaloo( m_shooterSubsystem, Constants.YEET_SPEED_HIGH)
+    m_operatorDpadRight = new GamepadAxisButton(this::operatorDpadRight);
+    m_operatorDpadRight
+      .whileTrue( new ShooterYeetCommandPart2ElectricBoogaloo( m_shooterSubsystem, Constants.YEET_SPEED_HIGH)
         .andThen( ()->m_shooterSubsystem.setKickerSpeed(0.0) )
         .andThen( ()->m_shooterSubsystem.setYeetSpeed(0.0) ) 
       );
-
-  m_operatorController.getDPadButton(Direction.DOWN)
-    .whileActiveOnce( new ShooterYeetCommandPart2ElectricBoogaloo( m_shooterSubsystem,  2700)
-      .andThen( ()->m_shooterSubsystem.setKickerSpeed(0.0) )
-      .andThen( ()->m_shooterSubsystem.setYeetSpeed(0.0) ) 
-    );
-
+  
+    m_operatorDpadDown = new GamepadAxisButton(this::operatorDpadDown);
+    m_operatorDpadDown
+      .whileTrue( new ShooterYeetCommandPart2ElectricBoogaloo( m_shooterSubsystem, 2700)
+        .andThen( ()->m_shooterSubsystem.setKickerSpeed(0.0) )
+        .andThen( ()->m_shooterSubsystem.setYeetSpeed(0.0) ) 
+      );
+      
     //Kicker controls on drive controller
-    m_controller.getDPadButton(Direction.UP)
-      .whileActiveOnce( new KickerCommand( m_shooterSubsystem, 1.0, false, false, 0 ) );
+    m_driverDpadUp = new GamepadAxisButton(this::driverDpadUp);
+    m_driverDpadUp
+      .whileTrue( new KickerCommand( m_shooterSubsystem, 1.0, false, false, 0 ) );
 
-    m_controller.getDPadButton(Direction.DOWN)
-      .whileActiveOnce(new KickerCommand(m_shooterSubsystem, -1.0, false, false, 0));
+    m_driverDpadDown = new GamepadAxisButton(this::driverDpadDown);
+    m_driverDpadDown
+      .whileTrue(new KickerCommand(m_shooterSubsystem, -1.0, false, false, 0));
 
-    m_controller.getDPadButton(Direction.LEFT)
-      .whileActiveOnce(new ShooterYeetCommandPart3ElectricBoogaloo( m_shooterSubsystem, -500));
+    m_driverDpadLeft = new GamepadAxisButton(this::driverDpadLeft);
+    m_driverDpadLeft
+      .whileTrue(new ShooterYeetCommandPart3ElectricBoogaloo( m_shooterSubsystem, -500));
 
-    m_controller.getDPadButton(Direction.RIGHT)
-      .whileActiveOnce(new ShooterYeetCommandPart3ElectricBoogaloo( m_shooterSubsystem, 500));
+    m_driverDpadRight = new GamepadAxisButton(this::driverDpadRight);
+    m_driverDpadRight
+      .whileTrue(new ShooterYeetCommandPart3ElectricBoogaloo( m_shooterSubsystem, 500));
 
-    m_controller.getAButton()
-      .whileActiveOnce( KickerMultipleCommand( 0.7 ) );
+    new JoystickButton(m_controller, XboxController.Button.kA.value)
+      .whileTrue( KickerMultipleCommand( 0.7 ) );
 
-    operatorLeftAxisUp = new JoystickAxisUp( m_operatorController.getLeftYAxis() );
-    operatorLeftAxisUp
-      .whenActive( new IntakePositionCommand( m_intakeSubsystem, Constants.INTAKE_ARM_POSITION_OUT ) );
+    m_operatorLeftAxisUp = new GamepadAxisButton(this::operatorLeftAxisUp);
+    m_operatorLeftAxisUp
+      .onTrue( new IntakePositionCommand( m_intakeSubsystem, Constants.INTAKE_ARM_POSITION_OUT ) );
 
-    operatorLeftAxisDown = new JoystickAxisDown( m_operatorController.getLeftYAxis() );
-    operatorLeftAxisDown
-      .whenActive( IntakeRetractCommand() );
+    m_operatorLeftAxisDown = new GamepadAxisButton(this::operatorLeftAxisDown);
+    m_operatorLeftAxisDown
+      .onTrue( IntakeRetractCommand() );
+  }
+
+  public boolean driverDpadUp()
+  {
+      return ( m_controller.getPOV() == 0 );
+  }
+
+  public boolean driverDpadLeft()
+  {
+      return ( m_controller.getPOV() == 270 );
+  }
+
+  public boolean driverDpadRight()
+  {
+      return ( m_controller.getPOV() == 90 );
+  }
+
+  public boolean driverDpadDown()
+  {
+      return ( m_controller.getPOV() == 180 );
+  }
+
+  public boolean operatorDpadUp()
+  {
+      return ( m_operatorController.getPOV() == 0 );
+  }
+
+  public boolean operatorDpadLeft()
+  {
+      return ( m_operatorController.getPOV() == 270 );
+  }
+
+  public boolean operatorDpadRight()
+  {
+      return ( m_operatorController.getPOV() == 90 );
+  }
+
+  public boolean operatorDpadDown()
+  {
+      return ( m_operatorController.getPOV() == 180 );
+  }
+
+  public boolean operatorLeftAxisUp()
+  {
+      return ( m_operatorController.getLeftY() < -0.6 );
+  }
+
+  public boolean operatorLeftAxisDown()
+  {
+      return ( m_operatorController.getLeftY() > 0.6 );
   }
 
   //We build generate this using a function since it's both parameterized, 
@@ -288,20 +282,10 @@ private class JoystickAxisDown extends Trigger {
     );
   }
   
-
-  public void checkBumper()
-  {
-    if(m_controller.getRightBumperButton().getAsBoolean()==true){
-      m_drivetrainSubsystem.joystickDivider = 5;
-    }else{
-      m_drivetrainSubsystem.joystickDivider = 5;
-    }
-  }
-
   public void controlIntake(){
     double yAxis;
     double setSpeed = 0;
-    yAxis = m_operatorController.getRightYAxis().get();
+    yAxis = m_operatorController.getRightY();
     if( yAxis < -0.1 )
     {
       setSpeed = -0.4 + (yAxis / 3);
@@ -312,16 +296,4 @@ private class JoystickAxisDown extends Trigger {
     }
     m_intakeSubsystem.setIntakeSpeed( setSpeed );
   }
-
-
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return autonomousChooser.getCommand(this);
-  }
-
 }

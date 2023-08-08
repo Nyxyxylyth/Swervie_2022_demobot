@@ -17,7 +17,7 @@ public class ShooterWait extends CommandBase {
 
     @Override
   public void initialize() {
-   // System.out.println(System.currentTimeMillis() + " shooter wait");
+    System.out.println(System.currentTimeMillis() + " shooter wait");
   }
     
 
@@ -25,7 +25,7 @@ public class ShooterWait extends CommandBase {
   @Override
   public boolean isFinished() {
       if (m_shooterSubsystem.isAtSpeed()){
-          //System.out.println(System.currentTimeMillis() + " at speed");
+          System.out.println(System.currentTimeMillis() + " at speed");
 
       }
       return m_shooterSubsystem.isAtSpeed();
