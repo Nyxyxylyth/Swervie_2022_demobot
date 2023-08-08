@@ -27,7 +27,7 @@ public final class Constants {
 
     public static final int YEET_MOTOR = 40;
     public static final int YEET_SPEED_HIGH = 2500;
-    public static final int YEET_SPEED_LOW = 1300;
+    public static final int YEET_SPEED_LOW = 1600;
     public static final double YEET_SPEED_TOLERANCE = 0.03; //0.015;
 
     public static final int TALON_TIMEOUT_MS = 5000;
