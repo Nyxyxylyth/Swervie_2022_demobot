@@ -1,5 +1,9 @@
 package frc.robot.subsystems;
 
+<<<<<<< HEAD
+=======
+import edu.wpi.first.networktables.EntryListenerFlags;
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.util.sendable.Sendable;
@@ -76,6 +80,12 @@ public class ShooterSubsystem extends SubsystemBase{
 
       setYeetSpeed(0.0);
 
+<<<<<<< HEAD
+=======
+      tab = Shuffleboard.getTab("SmartDashboard");
+      lightSensor = tab.add("Light Sensor",0).getEntry();
+
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
       //FIXME: ugh why doesn't this work sometimes
       m_kickerMotor.setInverted(true);
       m_yeetMotor.setInverted(true);
@@ -84,6 +94,14 @@ public class ShooterSubsystem extends SubsystemBase{
     @Override
     public void periodic() {
       // This method will be called once per scheduler run
+<<<<<<< HEAD
+=======
+      if( isLightCurtainBlocked() == true )
+        lightSensor.setNumber( 1 );
+      else {
+        lightSensor.setNumber(0);
+      }
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
       shooterOutputEntry.setDouble( m_yeetMotor.getBusVoltage() );
       shooterSpeedEntry.setDouble( getSpeed() );
     }

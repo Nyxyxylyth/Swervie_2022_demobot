@@ -18,14 +18,20 @@ public class ShooterYeetCommandPart3ElectricBoogaloo extends CommandBase{
       // Called when the command is initially scheduled.
       @Override
       public void initialize() {
+<<<<<<< HEAD
         System.out.println("ShooterYeetCommand3 init: speed=" + m_shooterYeetSpeed);
+=======
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
         m_shooterSubsystem.setYeetSpeed(m_shooterYeetSpeed);
       }
     
       // Called once the command ends or is interrupted.
       @Override
       public void end(boolean interrupted) {
+<<<<<<< HEAD
         System.out.println("ShooterYeetCommand3 end: speed=0");
+=======
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
         m_shooterSubsystem.setYeetSpeed(0.0);
       }
     

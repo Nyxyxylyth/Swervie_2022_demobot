@@ -25,4 +25,14 @@ public class ShooterYeetCommandPart2ElectricBoogaloo extends SequentialCommandGr
   
   }
 
+<<<<<<< HEAD
+=======
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {
+    m_shooterSubsystem.setKickerSpeed(0.0);
+    m_shooterSubsystem.setYeetSpeed(0.0);
+  }
+    
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
 }

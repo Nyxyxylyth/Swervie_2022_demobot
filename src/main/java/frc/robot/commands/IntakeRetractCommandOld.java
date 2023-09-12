@@ -28,4 +28,11 @@ public class IntakeRetractCommandOld extends SequentialCommandGroup {
 
   }
 
+<<<<<<< HEAD
+=======
+  @Override
+  public void end(boolean interrupted) {
+  }
+
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
 }

@@ -1,6 +1,10 @@
 plugins {
     id "java"
+<<<<<<< HEAD
     id "edu.wpi.first.GradleRIO" version "2023.4.3"
+=======
+    id "edu.wpi.first.GradleRIO" version "2022.4.1"
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
 }
 
 sourceCompatibility = JavaVersion.VERSION_11
@@ -46,7 +50,11 @@ wpi.java.debugJni = false
 def includeDesktopSupport = false
 
 // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
+<<<<<<< HEAD
 // Also defines JUnit 5.
+=======
+// Also defines JUnit 4.
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
 dependencies {
     implementation wpi.java.deps.wpilib()
     implementation wpi.java.vendor.java()
@@ -65,6 +73,7 @@ dependencies {
     nativeRelease wpi.java.vendor.jniRelease(wpi.platforms.desktop)
     simulationRelease wpi.sim.enableRelease()
 
+<<<<<<< HEAD
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     testImplementation 'org.junit.jupiter:junit-jupiter-params:5.8.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
@@ -73,6 +82,9 @@ dependencies {
 test {
     useJUnitPlatform()
     systemProperty 'junit.jupiter.extensions.autodetection.enabled', 'true'
+=======
+    testImplementation 'junit:junit:4.12'
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
 }
 
 // Simulation configuration (e.g. environment variables).
@@ -92,8 +104,11 @@ jar {
 deployArtifact.jarTask = jar
 wpi.java.configureExecutableTasks(jar)
 wpi.java.configureTestTasks(test)
+<<<<<<< HEAD
 
 // Configure string concat to always inline compile
 tasks.withType(JavaCompile) {
     options.compilerArgs.add '-XDstringConcat=inline'
 }
+=======
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff

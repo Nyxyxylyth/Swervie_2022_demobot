@@ -158,6 +158,7 @@ gradle-app.setting
 .settings/
 bin/
 
+<<<<<<< HEAD
 # IntelliJ
 *.iml
 *.ipr
@@ -168,5 +169,7 @@ out/
 # Fleet
 .fleet
 
+=======
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
 # Simulation GUI and other tools window save file
 *-window.json

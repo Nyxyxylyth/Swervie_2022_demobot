@@ -1,10 +1,21 @@
 import org.gradle.internal.os.OperatingSystem
 
 pluginManagement {
+<<<<<<< HEAD
     repositories {
         mavenLocal()
         gradlePluginPortal()
         String frcYear = '2023'
+=======
+    plugins {
+        id 'com.github.johnrengelman.shadow' version '5.2.0'
+        id 'net.ltgt.errorprone' version '1.1.1'
+    }
+    repositories {
+        mavenLocal()
+        gradlePluginPortal()
+        String frcYear = '2022'
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
         File frcHome
         if (OperatingSystem.current().isWindows()) {
             String publicFolder = System.getenv('PUBLIC')

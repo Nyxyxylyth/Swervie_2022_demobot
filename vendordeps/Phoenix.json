@@ -1,29 +1,48 @@
 {
     "fileName": "Phoenix.json",
+<<<<<<< HEAD
     "name": "CTRE-Phoenix (v5)",
     "version": "5.31.0+23.2.2",
     "frcYear": 2023,
+=======
+    "name": "CTRE-Phoenix",
+    "version": "5.21.4",
+    "frcYear": 2022,
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
     "uuid": "ab676553-b602-441f-a38d-f1296eff6537",
     "mavenUrls": [
         "https://maven.ctr-electronics.com/release/"
     ],
+<<<<<<< HEAD
     "jsonUrl": "https://maven.ctr-electronics.com/release/com/ctre/phoenix/Phoenix5-frc2023-latest.json",
+=======
+    "jsonUrl": "https://maven.ctr-electronics.com/release/com/ctre/phoenix/Phoenix-frc2022-latest.json",
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
     "javaDependencies": [
         {
             "groupId": "com.ctre.phoenix",
             "artifactId": "api-java",
+<<<<<<< HEAD
             "version": "5.31.0"
+=======
+            "version": "5.21.4"
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
         },
         {
             "groupId": "com.ctre.phoenix",
             "artifactId": "wpiapi-java",
+<<<<<<< HEAD
             "version": "5.31.0"
+=======
+            "version": "5.21.4"
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
         }
     ],
     "jniDependencies": [
         {
             "groupId": "com.ctre.phoenix",
             "artifactId": "cci",
+<<<<<<< HEAD
             "version": "5.31.0",
             "isJar": false,
             "skipInvalidPlatforms": true,
@@ -33,16 +52,29 @@
                 "linuxathena"
             ],
             "simMode": "hwsim"
+=======
+            "version": "5.21.4",
+            "isJar": false,
+            "skipInvalidPlatforms": true,
+            "validPlatforms": [
+                "linuxathena"
+            ]
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
         },
         {
             "groupId": "com.ctre.phoenix.sim",
             "artifactId": "cci-sim",
+<<<<<<< HEAD
             "version": "5.31.0",
+=======
+            "version": "5.21.4",
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
             "isJar": false,
             "skipInvalidPlatforms": true,
             "validPlatforms": [
                 "windowsx86-64",
                 "linuxx86-64",
+<<<<<<< HEAD
                 "osxuniversal"
             ],
             "simMode": "swsim"
@@ -77,11 +109,21 @@
             "groupId": "com.ctre.phoenix6.sim",
             "artifactId": "simTalonSRX",
             "version": "23.2.2",
+=======
+                "osxx86-64"
+            ]
+        },
+        {
+            "groupId": "com.ctre.phoenix.sim",
+            "artifactId": "simTalonSRX",
+            "version": "5.21.4",
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
             "isJar": false,
             "skipInvalidPlatforms": true,
             "validPlatforms": [
                 "windowsx86-64",
                 "linuxx86-64",
+<<<<<<< HEAD
                 "osxuniversal"
             ],
             "simMode": "swsim"
@@ -90,11 +132,21 @@
             "groupId": "com.ctre.phoenix6.sim",
             "artifactId": "simTalonFX",
             "version": "23.2.2",
+=======
+                "osxx86-64"
+            ]
+        },
+        {
+            "groupId": "com.ctre.phoenix.sim",
+            "artifactId": "simTalonFX",
+            "version": "5.21.4",
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
             "isJar": false,
             "skipInvalidPlatforms": true,
             "validPlatforms": [
                 "windowsx86-64",
                 "linuxx86-64",
+<<<<<<< HEAD
                 "osxuniversal"
             ],
             "simMode": "swsim"
@@ -103,11 +155,21 @@
             "groupId": "com.ctre.phoenix6.sim",
             "artifactId": "simVictorSPX",
             "version": "23.2.2",
+=======
+                "osxx86-64"
+            ]
+        },
+        {
+            "groupId": "com.ctre.phoenix.sim",
+            "artifactId": "simVictorSPX",
+            "version": "5.21.4",
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
             "isJar": false,
             "skipInvalidPlatforms": true,
             "validPlatforms": [
                 "windowsx86-64",
                 "linuxx86-64",
+<<<<<<< HEAD
                 "osxuniversal"
             ],
             "simMode": "swsim"
@@ -116,11 +178,21 @@
             "groupId": "com.ctre.phoenix6.sim",
             "artifactId": "simPigeonIMU",
             "version": "23.2.2",
+=======
+                "osxx86-64"
+            ]
+        },
+        {
+            "groupId": "com.ctre.phoenix.sim",
+            "artifactId": "simPigeonIMU",
+            "version": "5.21.4",
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
             "isJar": false,
             "skipInvalidPlatforms": true,
             "validPlatforms": [
                 "windowsx86-64",
                 "linuxx86-64",
+<<<<<<< HEAD
                 "osxuniversal"
             ],
             "simMode": "swsim"
@@ -129,11 +201,21 @@
             "groupId": "com.ctre.phoenix6.sim",
             "artifactId": "simCANCoder",
             "version": "23.2.2",
+=======
+                "osxx86-64"
+            ]
+        },
+        {
+            "groupId": "com.ctre.phoenix.sim",
+            "artifactId": "simCANCoder",
+            "version": "5.21.4",
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
             "isJar": false,
             "skipInvalidPlatforms": true,
             "validPlatforms": [
                 "windowsx86-64",
                 "linuxx86-64",
+<<<<<<< HEAD
                 "osxuniversal"
             ],
             "simMode": "swsim"
@@ -176,48 +258,75 @@
                 "osxuniversal"
             ],
             "simMode": "swsim"
+=======
+                "osxx86-64"
+            ]
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
         }
     ],
     "cppDependencies": [
         {
             "groupId": "com.ctre.phoenix",
             "artifactId": "wpiapi-cpp",
+<<<<<<< HEAD
             "version": "5.31.0",
+=======
+            "version": "5.21.4",
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
             "libName": "CTRE_Phoenix_WPI",
             "headerClassifier": "headers",
             "sharedLibrary": true,
             "skipInvalidPlatforms": true,
             "binaryPlatforms": [
+<<<<<<< HEAD
                 "windowsx86-64",
                 "linuxx86-64",
                 "linuxathena"
             ],
             "simMode": "hwsim"
+=======
+                "linuxathena"
+            ]
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
         },
         {
             "groupId": "com.ctre.phoenix",
             "artifactId": "api-cpp",
+<<<<<<< HEAD
             "version": "5.31.0",
+=======
+            "version": "5.21.4",
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
             "libName": "CTRE_Phoenix",
             "headerClassifier": "headers",
             "sharedLibrary": true,
             "skipInvalidPlatforms": true,
             "binaryPlatforms": [
+<<<<<<< HEAD
                 "windowsx86-64",
                 "linuxx86-64",
                 "linuxathena"
             ],
             "simMode": "hwsim"
+=======
+                "linuxathena"
+            ]
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
         },
         {
             "groupId": "com.ctre.phoenix",
             "artifactId": "cci",
+<<<<<<< HEAD
             "version": "5.31.0",
+=======
+            "version": "5.21.4",
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
             "libName": "CTRE_PhoenixCCI",
             "headerClassifier": "headers",
             "sharedLibrary": true,
             "skipInvalidPlatforms": true,
             "binaryPlatforms": [
+<<<<<<< HEAD
                 "windowsx86-64",
                 "linuxx86-64",
                 "linuxathena"
@@ -238,11 +347,19 @@
                 "linuxathena"
             ],
             "simMode": "hwsim"
+=======
+                "linuxathena"
+            ]
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
         },
         {
             "groupId": "com.ctre.phoenix.sim",
             "artifactId": "wpiapi-cpp-sim",
+<<<<<<< HEAD
             "version": "5.31.0",
+=======
+            "version": "5.21.4",
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
             "libName": "CTRE_Phoenix_WPISim",
             "headerClassifier": "headers",
             "sharedLibrary": true,
@@ -250,14 +367,23 @@
             "binaryPlatforms": [
                 "windowsx86-64",
                 "linuxx86-64",
+<<<<<<< HEAD
                 "osxuniversal"
             ],
             "simMode": "swsim"
+=======
+                "osxx86-64"
+            ]
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
         },
         {
             "groupId": "com.ctre.phoenix.sim",
             "artifactId": "api-cpp-sim",
+<<<<<<< HEAD
             "version": "5.31.0",
+=======
+            "version": "5.21.4",
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
             "libName": "CTRE_PhoenixSim",
             "headerClassifier": "headers",
             "sharedLibrary": true,
@@ -265,14 +391,23 @@
             "binaryPlatforms": [
                 "windowsx86-64",
                 "linuxx86-64",
+<<<<<<< HEAD
                 "osxuniversal"
             ],
             "simMode": "swsim"
+=======
+                "osxx86-64"
+            ]
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
         },
         {
             "groupId": "com.ctre.phoenix.sim",
             "artifactId": "cci-sim",
+<<<<<<< HEAD
             "version": "5.31.0",
+=======
+            "version": "5.21.4",
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
             "libName": "CTRE_PhoenixCCISim",
             "headerClassifier": "headers",
             "sharedLibrary": true,
@@ -280,6 +415,7 @@
             "binaryPlatforms": [
                 "windowsx86-64",
                 "linuxx86-64",
+<<<<<<< HEAD
                 "osxuniversal"
             ],
             "simMode": "swsim"
@@ -303,6 +439,15 @@
             "groupId": "com.ctre.phoenix6.sim",
             "artifactId": "simTalonSRX",
             "version": "23.2.2",
+=======
+                "osxx86-64"
+            ]
+        },
+        {
+            "groupId": "com.ctre.phoenix.sim",
+            "artifactId": "simTalonSRX",
+            "version": "5.21.4",
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
             "libName": "CTRE_SimTalonSRX",
             "headerClassifier": "headers",
             "sharedLibrary": true,
@@ -310,6 +455,7 @@
             "binaryPlatforms": [
                 "windowsx86-64",
                 "linuxx86-64",
+<<<<<<< HEAD
                 "osxuniversal"
             ],
             "simMode": "swsim"
@@ -318,6 +464,15 @@
             "groupId": "com.ctre.phoenix6.sim",
             "artifactId": "simTalonFX",
             "version": "23.2.2",
+=======
+                "osxx86-64"
+            ]
+        },
+        {
+            "groupId": "com.ctre.phoenix.sim",
+            "artifactId": "simTalonFX",
+            "version": "5.21.4",
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
             "libName": "CTRE_SimTalonFX",
             "headerClassifier": "headers",
             "sharedLibrary": true,
@@ -325,6 +480,7 @@
             "binaryPlatforms": [
                 "windowsx86-64",
                 "linuxx86-64",
+<<<<<<< HEAD
                 "osxuniversal"
             ],
             "simMode": "swsim"
@@ -333,6 +489,15 @@
             "groupId": "com.ctre.phoenix6.sim",
             "artifactId": "simVictorSPX",
             "version": "23.2.2",
+=======
+                "osxx86-64"
+            ]
+        },
+        {
+            "groupId": "com.ctre.phoenix.sim",
+            "artifactId": "simVictorSPX",
+            "version": "5.21.4",
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
             "libName": "CTRE_SimVictorSPX",
             "headerClassifier": "headers",
             "sharedLibrary": true,
@@ -340,6 +505,7 @@
             "binaryPlatforms": [
                 "windowsx86-64",
                 "linuxx86-64",
+<<<<<<< HEAD
                 "osxuniversal"
             ],
             "simMode": "swsim"
@@ -348,6 +514,15 @@
             "groupId": "com.ctre.phoenix6.sim",
             "artifactId": "simPigeonIMU",
             "version": "23.2.2",
+=======
+                "osxx86-64"
+            ]
+        },
+        {
+            "groupId": "com.ctre.phoenix.sim",
+            "artifactId": "simPigeonIMU",
+            "version": "5.21.4",
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
             "libName": "CTRE_SimPigeonIMU",
             "headerClassifier": "headers",
             "sharedLibrary": true,
@@ -355,6 +530,7 @@
             "binaryPlatforms": [
                 "windowsx86-64",
                 "linuxx86-64",
+<<<<<<< HEAD
                 "osxuniversal"
             ],
             "simMode": "swsim"
@@ -363,6 +539,15 @@
             "groupId": "com.ctre.phoenix6.sim",
             "artifactId": "simCANCoder",
             "version": "23.2.2",
+=======
+                "osxx86-64"
+            ]
+        },
+        {
+            "groupId": "com.ctre.phoenix.sim",
+            "artifactId": "simCANCoder",
+            "version": "5.21.4",
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
             "libName": "CTRE_SimCANCoder",
             "headerClassifier": "headers",
             "sharedLibrary": true,
@@ -370,6 +555,7 @@
             "binaryPlatforms": [
                 "windowsx86-64",
                 "linuxx86-64",
+<<<<<<< HEAD
                 "osxuniversal"
             ],
             "simMode": "swsim"
@@ -418,6 +604,10 @@
                 "osxuniversal"
             ],
             "simMode": "swsim"
+=======
+                "osxx86-64"
+            ]
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
         }
     ]
 }

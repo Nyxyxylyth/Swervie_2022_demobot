@@ -19,7 +19,10 @@ public class ShooterCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+<<<<<<< HEAD
     System.out.println("ShooterCommand to " + m_output);
+=======
+>>>>>>> 73780bf7f470dbb7a75c6328383eb80c7dd4f9ff
     m_shooterSubsystem.setYeetSpeed(m_output);
   }
 
