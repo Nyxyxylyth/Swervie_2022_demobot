@@ -130,6 +130,9 @@ private double getDriverRotate()
     new JoystickButton(m_controller, XboxController.Button.kStart.value)
       .whenPressed( () -> swerveSubsystem.zeroHeading(0.0) );
 
+    new JoystickButton(m_controller, XboxController.Button.kBack.value)
+      .whenPressed( () -> swerveSubsystem.zeroHeading(0.0) );
+
     //Shooter controls on operator controller
     // center to back bumper  12' 1" = 2500 rpm   limelight ty 0 degrees
     // center to back bumper: 13' 3" = 2500 rpm   limelight ty 4.00 degrees
